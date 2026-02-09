@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin AI DB^2</title>
+    <link rel="stylesheet" href="frontend/update_prompt/style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            Prompt Database
+        </div>
+
+        <div class="content">
+                <!-- Prompt Code Agent -->
+                <div id="success-message" class="success-box" style="display: none;">
+                    ✓ บันทึกสำเร็จ!
+                </div>
+                <textarea id="prompt-code-agent" rows="20"></textarea>
+                <button id="uppdate-prompt-code-agent">Update Database</button>
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="module" src="frontend/update_prompt/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+prompt_mockdata: |
+  Database: owner
+    Collection: owner
+      Field: owner_id [string]: The unique ID of each restaurant, used to identify the owner of the restaurant. -> `"e1e6b2..."`  
+            restaurant_name [string]: The name of the restaurant. -> "Luffy" 
+            city [string]: The province where the restaurant operates. -> "Bangkok"
+                                            
+  Database: sales
+    Collection: menus
+      Field: owner_id [string]: The unique ID of each restaurant, used to identify the owner of the restaurant. -> `"e1e6b2..."` 
+            menu_id [string]: The unique ID of each menu item. -> 1
+            menu_name [string]: The name of each menu item. -> "Pad Thai"
+            category [string]: The food category of the menu item. -> "Main"
+            price [number]: The price of the menu item. -> 60
+            cost [number]: The cost of the menu item. -> 30
+  
+  Database: sales
+    Collection: sales
+      Field: owner_id [string]: The unique ID of each restaurant, used to identify the owner of the restaurant. -> `"e1e6b2..."` 
+            menu_id [string]: The unique ID of each menu item. -> 1
+            quantity [string]: The quantity of the item sold. -> 3
+            order_date [string]: The date when the item was sold. -> "2026-01-01"
+  

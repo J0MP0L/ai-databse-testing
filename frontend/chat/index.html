@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Data Assistant</title>
+    <link rel="stylesheet" href="frontend/chat/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Chat Section -->
+        <div class="chat-section">
+            <div class="chat-header">
+                SUPER AI DB^2
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant">
+                    <div class="message-content">
+สวัสดีครับ! ผมสามารถช่วยคุณวิเคราะห์ข้อมูลและสร้างกราฟได้ ลองถามอะไรก็ได้เลยครับ
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <form class="chat-input-form" id="chatForm">
+                    <input 
+                        type="text" 
+                        class="chat-input" 
+                        id="userInput" 
+                        placeholder="พิมพ์ข้อความของคุณ..." 
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="send-button">ส่ง</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Side Panel -->
+        <div class="side-panel">
+            <!-- Download Section -->
+            <div class="panel-card download-section" id="downloadSection">
+                <div class="panel-header">ดาวน์โหลด</div>
+                <div class="panel-content" id="downloadContent">
+                    <!-- Loading indicator will be injected here -->
+                </div>
+            </div>
+
+            <!-- Visualization Section -->
+            <div class="panel-card" style="flex: 1;">
+                <div class="panel-header">Visualization</div>
+                <div class="panel-content">
+                    <div id="visualization-container">
+                        รอสักครู่... กราฟจะแสดงที่นี่
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="frontend/chat/index.js"></script>
+</body>
+</html>
