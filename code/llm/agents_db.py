@@ -71,7 +71,7 @@ async def mongodb_agent(dbstate: DbState) -> DbState:
         model_with_tools = model
 
     PROMPT_MONGODB_AGENT = SystemMessage(content = prompt_mongodb_agent.format(prompt_database=prompt_database, LIMIT=LIMIT, 
-                                            datetime=datetime.now(), owner_id = dbstate['owner_id']))   
+                                            datetime=datetime.now(), owner_id = dbstate['owner_id'], MAX_TOOL_CALLS=MAX_TOOL_CALLS))   
     messages = [PROMPT_MONGODB_AGENT] + dbstate['messages']
     response = await model_with_tools.ainvoke(messages)
 
