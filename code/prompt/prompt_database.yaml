@@ -1,61 +1,61 @@
 prompt_database: |
   Database: owner
     Collection: owner
-      Field: owner_id [string]: Unique identifier of the owner -> `"4e844..."` 
-            owner_name [string]: Name of the owner -> `"tester3"`                          
-            owner_type [string]: Type of owner account -> `"owner"`                            
-            brand_name [string]: Brand display name ->`"tester3"`                          
-            brand_code [string]: Internal brand code -> `"tester3"`                          
-            postfix [string]: Domain or brand postfix -> `"co"`                               
-            server_config [string]: Server configuration name -> `"test1"`                            
-            email_confirm [boolean]: Email confirmation status -> `false`                              
-            is_deleted [boolean]: Soft delete flag -> `false`                              
-            is_active [boolean]: Active account status -> `false`                              
-            branch_id [string]: Branch identifier -> `"1fe..."` 
-            package_type [number]: Package tier/type -> `3`                                  
-            package_id [string]: Package identifier -> `"c937..."` 
-            status [number]: Account status code -> `1`   
+      Field: owner_id [string]: Unique identifier of the owner e.g. `"4e844..."` 
+            owner_name [string]: Name of the owner e.g. `"tester3"`                          
+            owner_type [string]: Type of owner account e.g. `"owner"`                            
+            brand_name [string]: Brand display name e.g.`"tester3"`                          
+            brand_code [string]: Internal brand code e.g. `"tester3"`                          
+            postfix [string]: Domain or brand postfix e.g. `"co"`                               
+            server_config [string]: Server configuration name e.g. `"test1"`                            
+            email_confirm [boolean]: Email confirmation status e.g. `false`                              
+            is_deleted [boolean]: Soft delete flag e.g. `false`                              
+            is_active [boolean]: Active account status e.g. `false`                              
+            branch_id [string]: Branch identifier e.g. `"1fe..."` 
+            package_type [number]: Package tier/type e.g. `3`                                  
+            package_id [string]: Package identifier e.g. `"c937..."` 
+            status [number]: Account status code e.g. `1`   
                                             
   Database: bill
     Collection: bill_info
-      Field: bill_id [string]: Unique bill identifier -> "1bd5..."
-            bill_number [string]: Bill reference number -> "DN-0003"
-            bill_type [string]: Bill type code -> "2"
-            branch.branch_id [string]: Branch identifier -> "5d07..."
-            branch.branch_name [string]: Branch name -> "CAMIN DEMO"
-            branch.branch_code [string]: Branch code -> "CAMINDEMO"
-            branch.address [string]: Branch address -> "33"
-            table_id [string]: Table identifier -> "068c..."
-            table_number [string]: Table number -> "2"
-            zone_id [string]: Zone identifier -> "ceea..."
-            sales_channel.sales_channel_id [string]: Sales channel identifier -> "6527..."
-            sales_channel.sales_channel_name [string]: Sales channel name -> "ทานที่ร้าน"
-            sales_channel.sales_channel_short_name [string]: Sales channel short name -> "DN"
-            status [number]: Bill status code -> 1
-            is_deleted [boolean]: Soft delete flag -> False
-            is_quick_server [boolean]: Quick service flag -> False
-            time_at.created_at [number]: Creation time (Unix timestamp) -> 1711941175
-            time_at.human_readable_created_at [string]: Readable creation time -> "2024.04.01 10:12:55"
+      Field: bill_id [string]: Unique bill identifier e.g. "1bd5..."
+            bill_number [string]: Bill reference number e.g. "DN-0003"
+            bill_type [string]: Bill type code e.g. "2"
+            branch.branch_id [string]: Branch identifier e.g. "5d07..."
+            branch.branch_name [string]: Branch name e.g. "CAMIN DEMO"
+            branch.branch_code [string]: Branch code e.g. "CAMINDEMO"
+            branch.address [string]: Branch address e.g. "33"
+            table_id [string]: Table identifier e.g. "068c..."
+            table_number [string]: Table number e.g. "2"
+            zone_id [string]: Zone identifier e.g. "ceea..."
+            sales_channel.sales_channel_id [string]: Sales channel identifier e.g. "6527..."
+            sales_channel.sales_channel_name [string]: Sales channel name e.g. "ทานที่ร้าน"
+            sales_channel.sales_channel_short_name [string]: Sales channel short name e.g. "DN"
+            status [number]: Bill status code e.g. 1
+            is_deleted [boolean]: Soft delete flag e.g. False
+            is_quick_server [boolean]: Quick service flag e.g. False
+            time_at.created_at [number]: Creation time (Unix timestamp) e.g. 1711941175
+            time_at.human_readable_created_at [string]: Readable creation time e.g. "2024.04.01 10:12:55"
 
   Database: bill
     Collection: cart_item
-      Field: owner_id [string]: Unique identifier of the owner -> `"4e844..."`
-            branch_id [string]: Branch identifier -> "6e9e..."
-            bill_id [string]: Unique bill identifier -> "29da..."
-            cart_id [string]: Cart identifier -> "bcf..."
-            cart_type [string]: Cart type -> "pos"
-            cart_item_id [string]: Cart item identifier -> "255..."
-            product.product_id [string]: Product identifier -> "12459..."
-            product.product_name [string]: Product name (TH) -> "ปลากะพงทอดน้ำปลา"
-            product.product_code [string]: Product code -> "SIGB003"
-            product.product_quantity [number]: Product quantity -> 1
-            product.product_image [string]: Product image URL -> "https://sys.apisupergourmet.com"
-            product.free [boolean]: Is free item -> false
-            is_take_away [boolean]: Take away flag -> false
-            is_payment [boolean]: Payment completed flag -> false
-            is_order_captured [boolean]: Order captured flag -> true
-            step [number]: Order step/state -> 1
-            time_at.created_at [number]: Creation time (Unix timestamp) -> 1711054227
-            time_at.updated_at [number]: Last update time (Unix timestamp) -> 1711054234
-            time_at.human_readable_created_at [string]: Readable creation time -> "2024.03.22 03:50:27"
-            time_at.human_readable_updated_at [string]: Readable update time -> "2024.03.22 03:50:34"
+      Field: owner_id [string]: Unique identifier of the owner e.g. `"4e844..."`
+            branch_id [string]: Branch identifier e.g. "6e9e..."
+            bill_id [string]: Unique bill identifier e.g. "29da..."
+            cart_id [string]: Cart identifier e.g. "bcf..."
+            cart_type [string]: Cart type e.g. "pos"
+            cart_item_id [string]: Cart item identifier e.g. "255..."
+            product.product_id [string]: Product identifier e.g. "12459..."
+            product.product_name [string]: Product name (TH) e.g. "ปลากะพงทอดน้ำปลา"
+            product.product_code [string]: Product code e.g. "SIGB003"
+            product.product_quantity [number]: Product quantity e.g. 1
+            product.product_image [string]: Product image URL e.g. "https://sys.apisupergourmet.com"
+            product.free [boolean]: Is free item e.g. false
+            is_take_away [boolean]: Take away flag e.g. false
+            is_payment [boolean]: Payment completed flag e.g. false
+            is_order_captured [boolean]: Order captured flag e.g. true
+            step [number]: Order step/state e.g. 1
+            time_at.created_at [number]: Creation time (Unix timestamp) e.g. 1711054227
+            time_at.updated_at [number]: Last update time (Unix timestamp) e.g. 1711054234
+            time_at.human_readable_created_at [string]: Readable creation time e.g. "2024.03.22 03:50:27"
+            time_at.human_readable_updated_at [string]: Readable update time e.g. "2024.03.22 03:50:34"

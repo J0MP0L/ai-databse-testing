@@ -14,11 +14,13 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import json
-from func import AIDB
+from code.llm import AIDB
 from langchain_core.messages import BaseMessage
 import pandas as pd
 from plotly.graph_objs import Figure
 import plotly.io as pio
+from bson import ObjectId
+from uuid import UUID
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 MONGODB_URI = os.getenv("MONGODB_URI")
@@ -130,6 +132,11 @@ def convert_to_serializable(obj):
         return {k: convert_to_serializable(v) for k, v in obj.items()}
     elif isinstance(obj, (list, tuple)):
         return [convert_to_serializable(item) for item in obj]
+    
+    # MongoDB types
+    elif isinstance(obj, ObjectId):
+        return str(obj)
+    
     elif isinstance(obj, BaseMessage):
         result = {
             "type": obj.__class__.__name__,
@@ -147,17 +154,28 @@ def convert_to_serializable(obj):
         if hasattr(obj, 'tool_call_id'):
             result["tool_call_id"] = obj.tool_call_id
         return result
+        
     elif isinstance(obj, pd.DataFrame):
+        df_copy = obj.copy()
+        datetime_cols = df_copy.select_dtypes(include=['datetime64', 'datetime']).columns
+        for col in datetime_cols:
+            df_copy[col] = df_copy[col].astype(str)
+        
+        # แปลง ObjectId columns
+        for col in df_copy.columns:
+            if df_copy[col].apply(lambda x: isinstance(x, ObjectId)).any():
+                df_copy[col] = df_copy[col].apply(lambda x: str(x) if isinstance(x, ObjectId) else x)
+        
         return {
             "type": "dataframe",
-            "data": obj.to_dict(orient='records'),
+            "data": df_copy.to_dict(orient='records'),
             "columns": obj.columns.tolist(),
             "shape": list(obj.shape)
         }
+
     elif isinstance(obj, pd.Series):
         return obj.to_dict()
     elif isinstance(obj, Figure):
-        # ใช้ function พิเศษสำหรับ Plotly Figure
         return convert_plotly_figure(obj)
     elif isinstance(obj, (np.integer, np.floating)):
         return obj.item()
@@ -167,23 +185,36 @@ def convert_to_serializable(obj):
         return obj.isoformat()
     elif isinstance(obj, Decimal):
         return float(obj)
+    
+    # UUID
+    elif isinstance(obj, UUID):
+        return str(obj)
+    
+    # bytes
+    elif isinstance(obj, bytes):
+        return obj.decode('utf-8', errors='ignore')
+    
+    # set
+    elif isinstance(obj, set):
+        return list(obj)
+    
     elif obj is None:
         return None
     elif isinstance(obj, (str, int, float, bool)):
         return obj
     elif hasattr(obj, 'model_dump'):
         try:
-            return obj.model_dump()
+            return convert_to_serializable(obj.model_dump())
         except:
             pass
     elif hasattr(obj, 'dict'):
         try:
-            return obj.dict()
+            return convert_to_serializable(obj.dict())
         except:
             pass
     elif hasattr(obj, 'to_dict'):
         try:
-            return obj.to_dict()
+            return convert_to_serializable(obj.to_dict())
         except:
             pass
     
@@ -191,8 +222,8 @@ def convert_to_serializable(obj):
     try:
         return str(obj)
     except:
-        return None
-
+        return f"<unserializable: {type(obj).__name__}>"
+    
 @app.post("/api/chat")
 async def chat(request: ChatRequest):
     """Stream chat response"""

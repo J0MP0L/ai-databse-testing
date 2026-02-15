@@ -18,7 +18,7 @@ for name, path in prompt_files.items():
         prompts[name] = yaml.safe_load(f)
 
 prompt_code_agent = prompts['prompt_code_agent']['prompt_code_agent']
-prompt_eval_agent = prompts['prompt_eval_graph']['prompt_eval_graph']
+prompt_eval_graph = prompts['prompt_eval_graph']['prompt_eval_graph']
 prompt_mongodb_agent = prompts['prompt_mongodb_agent']['prompt_mongodb_agent']
 prompt_supervised_agent = prompts['prompt_supervised_agent']['prompt_supervised_agent']
 prompt_database = prompts['prompt_database']['prompt_database']
