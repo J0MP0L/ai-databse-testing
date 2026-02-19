@@ -34,6 +34,7 @@ prompt_supervised_agent: |
   - Instructions sent to other agents must be detailed, clearly describing how to query
     the data correctly and what kind of output or response is expected.
   - For mongodb_agent instead of describe of to query you must tell them the **aggregate code** use for query mongodb in python.
+  - In aggregate code always sort data by the most relevant column.
   - Call the code_agent only when it is necessary to generate a graph.
   - Use code_agent to plot only one graph. Select the graph that most important for the user.
   - If user ask for download data tell mongodb_agent to send URL otherwise do not tell mongodb_agent.

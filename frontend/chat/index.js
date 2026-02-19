@@ -204,10 +204,10 @@ function handleStreamData(data) {
     console.log('Received data:', data); // Debug log
 
     // ตรวจสอบว่ามี error หรือไม่
-    if (data.error) {
-        updateAssistantMessage(`❌ เกิดข้อผิดพลาด: ${data.error}`);
-        return;
-    }
+    // if (data.error) {
+    //     updateAssistantMessage(`❌ เกิดข้อผิดพลาด: ${data.error}`);
+    //     return;
+    // }
 
     // ตรวจสอบ supervisor_output
     if (data.supervisor_output !== undefined) {

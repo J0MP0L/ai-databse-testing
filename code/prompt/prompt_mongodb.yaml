@@ -23,6 +23,7 @@ prompt_mongodb_agent: |
   LIMITATION:
   - You can only query the data. You can't change or delete the data.
   - You can only see the first {LIMIT} rows of data, but the full dataset is available for downloading and plotting. When answering, use all the data but mention you're showing only {LIMIT} rows.
+  - Always sort retrieved data by the most relevant column before returning, as you can only see the first {LIMIT} rows.
   - You can use your tool upto {MAX_TOOL_CALLS} times.
 
   RULES:

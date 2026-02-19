@@ -5,19 +5,48 @@ prompt_mockdata: |
             restaurant_name [string]: The name of the restaurant. e.g. "Luffy" 
             city [string]: The province where the restaurant operates. e.g. "Bangkok"
                                             
-  Database: sales
-    Collection: menus
-      Field: owner_id [string]: The unique ID of each restaurant, used to identify the owner of the restaurant. e.g. `"e1e6b2..."` 
-            menu_id [string]: The unique ID of each menu item. e.g. 1
-            menu_name [string]: The name of each menu item. e.g. "Pad Thai"
-            category [string]: The food category of the menu item. e.g. "Main"
-            price [number]: The price of the menu item. e.g. 60
-            cost [number]: The cost of the menu item. e.g. 30
-  
-  Database: sales
-    Collection: sales
-      Field: owner_id [string]: The unique ID of each restaurant, used to identify the owner of the restaurant. e.g. `"e1e6b2..."` 
-            menu_id [string]: The unique ID of each menu item. e.g. 1
-            quantity [string]: The quantity of the item sold. e.g. 3
-            order_date [string]: The date when the item was sold. e.g. "05/01/2026": format DD/MM/YYYY
-  
+  Database: bill
+  Collection: bill_detail
+    Field: owner_id [string]: The unique ID of each restaurant, used to identify the owner of the restaurant. e.g. "e1e6b2..."
+           วันที่เปิดบิล [string]: The date when the bill was opened. e.g. "31/01/2026"
+           วันที่เปิดบิลunix [int]: The date when the bill was opened in Unix timestamp format. e.g. 46053
+           เวลาเปิดบิล [string]: The time when the bill was opened. e.g. "20:30"
+           วันที่เช็คบิล [string]: The date when the bill was closed. e.g. "31/01/2026"
+           วันที่เช็คบิลunix [int]: The date when the bill was closed in Unix timestamp format. e.g. 46053
+           เวลาเช็คบิล [string]: The time when the bill was closed. e.g. "21:18"
+           สาขา [string]: The branch name of the restaurant. e.g. "Camin เกษตรนวมินทร์"
+           Order ID [string]: The unique order identifier. e.g. "DN-0058"
+           INV,No [string]: The invoice number. e.g. "CM0022601310059"
+           หมายเลขโต๊ะ [string]: The table number for the order. e.g. "C8"
+           จำนวนลูกค้า [int]: The number of customers in the order. e.g. 2
+           ช่องทางการขาย [string]: The channel through which the sale was made. e.g. "ทานที่ร้าน"
+           หมวดหมู่ [string]: The food category of the menu item. e.g. "แกง"
+           รหัสเมนู [string]: The unique code for the menu item. e.g. "SOP999904ECAM029"
+           ชื่อเมนู [string]: The name of the menu item. e.g. "แกงส้มปลากะพงยอดมะพร้าวอ่อน"
+           จำนวนสินค้า [int]: The number of units ordered. e.g. 1
+           ราคาต่อหน่วย [float]: The price per unit before discount. e.g. 275
+           ยอดขาย [float]: The total sales amount before discount. e.g. 275
+           ส่วนลด [float]: The discount applied to the order. e.g. 55
+           ยอดขายหลังลด [float]: The sales amount after discount. e.g. 220
+           Service Charge [float]: The service charge applied. e.g. 0
+           ยอดก่อนภาษีมูลค่าเพิ่ม [float]: The amount before VAT is applied. e.g. 220
+           ภาษีมูลค่าเพิ่ม [float]: The VAT amount. e.g. 15.4
+           รวม [float]: The total amount including VAT (Revenue = Sales - Discount + SV + VAT). e.g. 235.4
+           ยอดขายสุทธิ [float]: The net sales amount (Sales - Discount). e.g. 220
+           ต้นทุนวัตถุดิบ [float]: The cost of raw materials. e.g. 90.36
+           กำไรหลังหักค่าวัตถุดิบ [float]: Profit after deducting raw material cost. e.g. 129.64
+           Delivery GP(%) [float]: Sales Share % e.g. 0
+           Delivery GP(฿) [float]: Sales Share Value. e.g. 0
+           VAT on GP [float]: VAT on gross profit. e.g. 0
+           กำไรขั้นต้น [float]: The gross profit amount. e.g. 129.64
+           ประเภทส่วนลด [string]: The type of discount applied. e.g. "ส่วนลดค่าอาหารพนักงาน 20%"
+           ประเภทโปรโมชั่น [string]: The promotion type applied. e.g. "-"
+           ชื่อลูกค้า [string]: The name of the customer. e.g. "ประภัสสร ตันติเกตุ"
+           เบอร์โทรศัพท์ [string]: The customer's phone number. e.g. "0892944..."
+           สมาชิก [string]: The membership status of the customer. e.g. "Classic"
+           รูปแบบการชำระเงิน [string]: The payment method used. e.g. "เงินสด"
+           POS NO [string]: The POS machine number. e.g. "-"
+           เปิดบิลโดย [string]: The staff or employee name who opened the bill. e.g. "สุภาพร สุขขัง"
+           ผู้ทำรายการ [string]: The staff or employee name who processed the transaction. e.g. "สุภาพร สุขขัง"
+           ระยะเวลาบิล [string]: The duration of the bill. e.g. "-"
+           สถานะออเดอร์ [string]: The status of the order. e.g. "สำเร็จ"
