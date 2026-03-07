@@ -1,64 +1,73 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Data Assistant</title>
-    <link rel="stylesheet" href="frontend/chat/style.css">
-</head>
+    <link rel="stylesheet" href="frontend/chat/style.css" />
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <!-- Chat Section -->
-        <div class="chat-section">
-            <div class="chat-header">
-                SUPER AI DB^2
+      <!-- Chat Section -->
+      <div class="chat-section">
+        <div class="chat-header">SUPER AI DB^2</div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="message assistant">
+            <div class="message-content">
+<h2>👋 สวัสดีครับ! ผม "น้องสุดยอด Data Analysis" ยินดีให้บริการครับ!</h2>
+น้องสุดยอดพร้อมเป็นผู้ช่วยวิเคราะห์ข้อมูลให้ใช้งานได้จริงด้วยการสร้าง
+กราฟ และ รายงานExcel พร้อมบทวิเคราะห์ข้อมูลแบบมืออาชีพครับครับ💡
+
+<h3>อยากให้น้องสุดยอดช่วยอะไรครับ?</h3>
+<h3>1️⃣ ส่งไฟล์ Excel ยอดขายรวมรายเดือน</h3>
+  - สร้างไฟล์ Excel ยอดขายรวม รายเดือนในแต่ละวัน
+
+<h3>2️⃣ วิเคราะห์หาเมนูที่ต้นทุนแพงขึ้นเกิน Foodcost ที่กำหนด</h3>
+  - ค้นหาเมนูที่มีต้นทุนเพิ่มขึ้นสูงกว่า Food Cost ที่กำหนด
+
+บอกผมได้เลยว่าต้องการวิเคราะห์ข้อมูลเรื่องอะไรครับ😊
             </div>
-            <div class="chat-messages" id="chatMessages">
-                <div class="message assistant">
-                    <div class="message-content">
-สวัสดีครับ! ผมสามารถช่วยคุณวิเคราะห์ข้อมูลและสร้างกราฟได้ ลองถามอะไรก็ได้เลยครับ
-                    </div>
-                </div>
-            </div>
-            <div class="chat-input-container">
-                <form class="chat-input-form" id="chatForm">
-                    <input 
-                        type="text" 
-                        class="chat-input" 
-                        id="userInput" 
-                        placeholder="พิมพ์ข้อความของคุณ..." 
-                        autocomplete="off"
-                    >
-                    <button type="submit" class="send-button">ส่ง</button>
-                </form>
-            </div>
+          </div>
+        </div>
+        <div class="chat-input-container">
+          <form class="chat-input-form" id="chatForm">
+            <input
+              type="text"
+              class="chat-input"
+              id="userInput"
+              placeholder="พิมพ์ข้อความของคุณ..."
+              autocomplete="off"
+            />
+            <button type="submit" class="send-button">ส่ง</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Side Panel -->
+      <div class="side-panel">
+        <!-- Download Section -->
+        <div class="panel-card download-section" id="downloadSection">
+          <div class="panel-header">ดาวน์โหลด</div>
+          <div class="panel-content" id="downloadContent">
+            <!-- Loading indicator will be injected here -->
+          </div>
         </div>
 
-        <!-- Side Panel -->
-        <div class="side-panel">
-            <!-- Download Section -->
-            <div class="panel-card download-section" id="downloadSection">
-                <div class="panel-header">ดาวน์โหลด</div>
-                <div class="panel-content" id="downloadContent">
-                    <!-- Loading indicator will be injected here -->
-                </div>
+        <!-- Visualization Section -->
+        <div class="panel-card" style="flex: 1">
+          <div class="panel-header">Visualization</div>
+          <div class="panel-content">
+            <div id="visualization-container">
+              รอสักครู่... กราฟจะแสดงที่นี่
             </div>
-
-            <!-- Visualization Section -->
-            <div class="panel-card" style="flex: 1;">
-                <div class="panel-header">Visualization</div>
-                <div class="panel-content">
-                    <div id="visualization-container">
-                        รอสักครู่... กราฟจะแสดงที่นี่
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="frontend/chat/index.js"></script>
-</body>
+  </body>
 </html>

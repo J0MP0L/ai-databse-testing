@@ -1,15 +1,18 @@
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
+from langchain_core.messages import messages_from_dict, messages_to_dict
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, START, END, add_messages
 from langchain.messages import AnyMessage, ToolMessage
 from langgraph.graph.state import CompiledStateGraph
 from langchain_core.messages import BaseMessage
 
+import redis
 import base64
 import re
+import json
 import pandas as pd
 from plotly.graph_objs import Figure
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 import asyncio
 import plotly.graph_objects as go
 
@@ -27,12 +30,15 @@ prompt_database = prompt_mockdata
 
 load_dotenv(override=True)
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+TZ_BANGKOK = timezone(timedelta(hours=7))
 
 LIMIT = 10
 MAX_TOOL_CALLS = 6
 MAX_EVAL_CALLS = 3
 MAX_QUERYDB = 3
-WINDOW_SIZE = 10
+WINDOW_SIZE = 15
+REDIS_URL = "redis://localhost:6379"
+TTL = 3600
 
 def create_llm(
     model: str, 
@@ -71,7 +77,7 @@ async def mongodb_agent(dbstate: DbState) -> DbState:
         model_with_tools = model
 
     PROMPT_MONGODB_AGENT = SystemMessage(content = prompt_mongodb_agent.format(prompt_database=prompt_database, LIMIT=LIMIT, 
-                                            datetime=datetime.now(), owner_id = dbstate['owner_id'], MAX_TOOL_CALLS=MAX_TOOL_CALLS))   
+                                            datetime=datetime.now(TZ_BANGKOK), owner_id = dbstate['owner_id'], MAX_TOOL_CALLS=MAX_TOOL_CALLS))   
     messages = [PROMPT_MONGODB_AGENT] + dbstate['messages']
     response = await model_with_tools.ainvoke(messages)
 
@@ -326,7 +332,7 @@ def extract_output_supervised(output: str) -> List[Dict]:
 async def call_supervisor_agent(state: State) -> State:
     prompt = SystemMessage(content = prompt_supervised_agent.format(
         prompt_database=prompt_database, 
-        datetime=datetime.now(),
+        datetime=datetime.now(TZ_BANGKOK),
         owner_id = state["owner_id"]) )
     messages = [prompt] + state["messages"] + state.get("within_messages", "")
     supervisor_agent = create_llm(model = "openai/gpt-5.2-codex", temperature=0.0, reasoning_effort="low", tags=["supervisor"])
@@ -402,13 +408,31 @@ graph = graph.compile()
 class WindowedMemoryManager:
     """Memory manager with sliding window (keep last N messages)"""
     
-    def __init__(self, window_size: int = 10):
+    def __init__(self, window_size: int = 10, url: str = "redis://localhost:6379", ttl: int = 3600):
         self.window_size = window_size
-        self.conversations: Dict[str, List[BaseMessage]] = {}
+        self.redis = redis.from_url(url)
+        self.ttl = ttl 
+
+    def _key(self, thread_id: str) -> str:
+        return f"conversation: {thread_id}"
+
+    def _load(self, thread_id: str) -> List[BaseMessage]:
+        """Load messages from Redis"""
+        data = self.redis.get(self._key(thread_id))
+        if not data:
+            return []
+        return messages_from_dict(json.loads(data))
+    
+    def _save(self, thread_id: str, messages: List[BaseMessage]):
+        self.redis.set(
+            self._key(thread_id), 
+            json.dumps(messages_to_dict(messages)), 
+            ex=self.ttl
+            )
     
     def get_messages(self, thread_id: str) -> List[BaseMessage]:
         """Get conversation history with sliding window"""
-        messages = self.conversations.get(thread_id, [])
+        messages = self._load(thread_id)
         # เก็บแค่ window_size messages สุดท้าย
         return messages[-self.window_size:] if len(messages) > self.window_size else messages
     
@@ -417,64 +441,29 @@ class WindowedMemoryManager:
         if isinstance(message, str):
             message = HumanMessage(content=message)
         
-        if thread_id not in self.conversations:
-            self.conversations[thread_id] = []
-        
-        self.conversations[thread_id].append(message)
-        
-        self._trim_if_needed(thread_id)
+        messages = self._load(thread_id)
+        messages.append(message)
+        ## trim messages ไว้ก่อน
+        messages_trimmed = messages[-self.window_size:] if len(messages) > self.window_size else messages
+        self._save(thread_id, messages_trimmed)
     
     def add_ai_message(self, thread_id: str, message: str | AIMessage):
         """Add AI response"""
         if isinstance(message, str):
             message = AIMessage(content=message)
         
-        if thread_id not in self.conversations:
-            self.conversations[thread_id] = []
-        
-        self.conversations[thread_id].append(message)
-        
-        self._trim_if_needed(thread_id)
-    
-    def _trim_if_needed(self, thread_id: str):
-        """Trim messages if exceeds window size"""
-        messages = self.conversations[thread_id]
-        if len(messages) > self.window_size:
-            # เก็บแค่ window_size messages สุดท้าย
-            self.conversations[thread_id] = messages[-self.window_size:]
+        messages = self._load(thread_id)
+        messages.append(message)
+        ## trim messages ไว้ก่อน
+        messages_trimmed = messages[-self.window_size:] if len(messages) > self.window_size else messages
+        self._save(thread_id, messages_trimmed)
     
     def clear_thread(self, thread_id: str):
         """Clear conversation"""
-        if thread_id in self.conversations:
-            del self.conversations[thread_id]
-        if thread_id in self.metadata:
-            del self.metadata[thread_id]
+        self.redis.delete(self._key(thread_id))
 
 # สร้าง memory manager
-memory = WindowedMemoryManager(window_size=WINDOW_SIZE)
-
-async def run_with_memory(user_message: str, thread_id: str, owner_id: str):
-    """Run graph with memory"""
-    
-    history = memory.get_messages(thread_id)
-    
-    new_message = HumanMessage(content=user_message)
-    
-    all_messages = history + [new_message]
-    
-    # เรียก graph
-    result = await graph.ainvoke({
-        "messages": all_messages,
-        "owner_id": owner_id,
-    })
-    
-    memory.add_user_message(thread_id, new_message)
-    
-    if result["messages"]:
-        last_ai_message = result["messages"][-1]
-        memory.add_ai_message(thread_id, last_ai_message)
-    
-    return result
+memory = WindowedMemoryManager(window_size=WINDOW_SIZE, url=REDIS_URL, ttl=TTL)
 
 async def AIDB(user_message: str, thread_id: str, owner_id: str):
     history = memory.get_messages(thread_id)

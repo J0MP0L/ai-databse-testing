@@ -6,13 +6,13 @@ prompt_mockdata: |
             city [string]: The province where the restaurant operates. e.g. "Bangkok"
                                             
   Database: bill
-  Collection: bill_detail
+  Collection: bill_detail  (NOTE: This collection is every row consis with one menu item in the bill. So one bill can have many rows in this collection)
     Field: owner_id [string]: The unique ID of each restaurant, used to identify the owner of the restaurant. e.g. "e1e6b2..."
-           วันที่เปิดบิล [string]: The date when the bill was opened. e.g. "31/01/2026"
-           วันที่เปิดบิลunix [int]: The date when the bill was opened in Unix timestamp format. e.g. 46053
+           วันที่เปิดบิล [string]: The date when the bill was opened. e.g. "2026.01.31 20:30:00"
+           วันที่เปิดบิลunix [int]: The date when the bill was opened in Unix timestamp format. e.g. 1769866200
            เวลาเปิดบิล [string]: The time when the bill was opened. e.g. "20:30"
-           วันที่เช็คบิล [string]: The date when the bill was closed. e.g. "31/01/2026"
-           วันที่เช็คบิลunix [int]: The date when the bill was closed in Unix timestamp format. e.g. 46053
+           วันที่เช็คบิล [string]: The date when the bill was closed. e.g. "2026.01.31 21:18:00"
+           วันที่เช็คบิลunix [int]: The date when the bill was closed in Unix timestamp format. e.g. 1769869080
            เวลาเช็คบิล [string]: The time when the bill was closed. e.g. "21:18"
            สาขา [string]: The branch name of the restaurant. e.g. "Camin เกษตรนวมินทร์"
            Order ID [string]: The unique order identifier. e.g. "DN-0058"
